@@ -56,7 +56,7 @@ void FLEXSPI_NorFlash_GetConfig(flexspi_nor_config_t *config)
 
     /* Sector Erase */
     config->memConfig.lookupTable[4U * NOR_CMD_LUT_SEQ_IDX_ERASESECTOR] =
-        FSL_ROM_FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0xD7U, RADDR_SDR, FLEXSPI_1PAD, 0x18U);
+        FSL_ROM_FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0x20U, RADDR_SDR, FLEXSPI_1PAD, 0x18U);
 #else
     /* Override some default config */
 	  config->memConfig.deviceType          = kFLEXSPIDeviceType_SerialNOR;
