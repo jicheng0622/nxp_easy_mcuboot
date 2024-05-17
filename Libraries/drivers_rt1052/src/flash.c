@@ -36,7 +36,6 @@ void FLEXSPI_NorFlash_GetConfig(flexspi_nor_config_t *config)
     /* Override some default config */
 	  config->memConfig.deviceType           = kFLEXSPIDeviceType_SerialNOR;
     config->memConfig.deviceModeType       = kDeviceConfigCmdType_Generic;
-	  config->memConfig.serialClkFreq        = kFLEXSPISerialClk_30MHz; //Safe Serial Flash Frequencey
 	  config->ipcmdSerialClkFreq             = kFLEXSPISerialClk_30MHz; //Safe Clock frequency for IP command
     config->memConfig.controllerMiscOption = FSL_ROM_FLEXSPI_BITMASK(kFLEXSPIMiscOffset_SafeConfigFreqEnable);//Always enable Safe configuration Frequency
      
@@ -56,7 +55,7 @@ void FLEXSPI_NorFlash_GetConfig(flexspi_nor_config_t *config)
 
     /* Sector Erase */
     config->memConfig.lookupTable[4U * NOR_CMD_LUT_SEQ_IDX_ERASESECTOR] =
-        FSL_ROM_FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0xD7U, RADDR_SDR, FLEXSPI_1PAD, 0x18U);
+        FSL_ROM_FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0x20U, RADDR_SDR, FLEXSPI_1PAD, 0x18U);
 #else
     /* Override some default config */
 	  config->memConfig.deviceType          = kFLEXSPIDeviceType_SerialNOR;
@@ -167,10 +166,10 @@ void FLEXSPI_NorFlash_GetConfig(flexspi_nor_config_t *config)
 }
 
  /**
- * @brief  »ñµÃÉÈÇø´óĞ¡
+ * @brief  è·å¾—æ‰‡åŒºå¤§å°
  * @note   None
  * @param  None
- * @retval FlashÉÈÇø³ß´ç
+ * @retval Flashæ‰‡åŒºå°ºå¯¸
  */
 uint32_t FLASH_GetSectorSize(void)
 {
@@ -182,7 +181,7 @@ uint32_t FLASH_GetSectorSize(void)
 }
 
  /**
- * @brief  »ñµÃ×îĞ¡±à³Ì³¤¶È
+ * @brief  è·å¾—æœ€å°ç¼–ç¨‹é•¿åº¦
  * @note   None
  * @param  None
  * @retval 256 or 512 for QSPI Flash
@@ -196,7 +195,7 @@ uint32_t FLASH_GetProgramCmd(void)
 #endif
 }
  /**
- * @brief  ³õÊ¼»¯Flash
+ * @brief  åˆå§‹åŒ–Flash
  * @note   None
  * @param  None
  * @retval None
@@ -213,7 +212,7 @@ void FLASH_Init(void)
 	  ROM_FLEXSPI_NorFlash_ClearCache(0);
 }
  /**
- * @brief  ·´³õÊ¼»¯Flash
+ * @brief  ååˆå§‹åŒ–Flash
  * @note   None
  * @param  None
  * @retval None
@@ -228,10 +227,10 @@ void FLASH_DeInit(void)
 }
 
  /**
- * @brief  ²Á³ıFlashÉÈÇø
- * @note   ¸Ã¹¦ÄÜ½«É¾³ıÒ»¸öFlashÉÈÇøµÄÄÚÈİ
- * @param  addr: ²Á³ıÇøÓòÆğÊ¼µØÖ·
- * @retval ·µ»Ø²Ù×÷½á¹û
+ * @brief  æ“¦é™¤Flashæ‰‡åŒº
+ * @note   è¯¥åŠŸèƒ½å°†åˆ é™¤ä¸€ä¸ªFlashæ‰‡åŒºçš„å†…å®¹
+ * @param  addr: æ“¦é™¤åŒºåŸŸèµ·å§‹åœ°å€
+ * @retval è¿”å›æ“ä½œç»“æœ
  */
 status_t FLASH_EraseSector(uint32_t addr)
 {
@@ -246,12 +245,12 @@ status_t FLASH_EraseSector(uint32_t addr)
 }
 
  /**
- * @brief  Ğ´FlashÒ»¸öÒ³
- * @note   ×Ö½ÚÊıĞ¡ÓÚµÈÓÚÒ»Ò³
- * @param  addr: ¿ªÊ¼µØÖ·
- * @param  buf : Ğ´ÈëÊı¾İÆğÊ¼Ö¸Õë
- * @param  len : ×Ö½ÚÊı
- * @retval kStatus_Success£ºÍê³É
+ * @brief  å†™Flashä¸€ä¸ªé¡µ
+ * @note   å­—èŠ‚æ•°å°äºç­‰äºä¸€é¡µ
+ * @param  addr: å¼€å§‹åœ°å€
+ * @param  buf : å†™å…¥æ•°æ®èµ·å§‹æŒ‡é’ˆ
+ * @param  len : å­—èŠ‚æ•°
+ * @retval kStatus_Successï¼šå®Œæˆ
  */
 status_t FLASH_WritePage(uint32_t addr, const uint8_t *buf, uint32_t len)
 {
@@ -266,11 +265,11 @@ status_t FLASH_WritePage(uint32_t addr, const uint8_t *buf, uint32_t len)
     return status;
 }
  /**
- * @brief  ¶ÁFlashÄÚÈİ
- * @param  addr: ¿ªÊ¼µØÖ·
- * @param  buf : ¶Á»º´æÖ¸Õë
- * @param  len : ×Ö½ÚÊı
- * @retval kStatus_Success£ºÍê³É
+ * @brief  è¯»Flashå†…å®¹
+ * @param  addr: å¼€å§‹åœ°å€
+ * @param  buf : è¯»ç¼“å­˜æŒ‡é’ˆ
+ * @param  len : å­—èŠ‚æ•°
+ * @retval kStatus_Successï¼šå®Œæˆ
  */
 status_t FLASH_Read(uint32_t addr, const uint8_t *buf, uint32_t len)
 {
@@ -295,10 +294,10 @@ status_t FLASH_Read(uint32_t addr, const uint8_t *buf, uint32_t len)
     return status;
 }
  /**
- * @brief  ÉèÖÃÉÈÇø²âÊÔ
+ * @brief  è®¾ç½®æ‰‡åŒºæµ‹è¯•
  * @note   None
- * @param  addr: ¿ªÊ¼µØÖ·
- * @retval CH_OK£ºÍê³É£»CH_ERR£ºÊ§°Ü
+ * @param  addr: å¼€å§‹åœ°å€
+ * @retval CH_OKï¼šå®Œæˆï¼›CH_ERRï¼šå¤±è´¥
  */
 static uint32_t FLASH_SetcorTest(uint32_t addr)
 {
@@ -348,10 +347,10 @@ static uint32_t FLASH_SetcorTest(uint32_t addr)
 }
 
  /**
- * @brief  ÉèÖÃÉÈÇø³ß´ç²âÊÔ
+ * @brief  è®¾ç½®æ‰‡åŒºå°ºå¯¸æµ‹è¯•
  * @note   None
- * @param  addr: ¿ªÊ¼µØÖ·
- * @retval CH_OK£ºÍê³É£»CH_ERR£ºÊ§°Ü
+ * @param  addr: å¼€å§‹åœ°å€
+ * @retval CH_OKï¼šå®Œæˆï¼›CH_ERRï¼šå¤±è´¥
  */
 static uint32_t FLASH_SetcorSizeTest(uint32_t addr)
 {
@@ -383,10 +382,10 @@ static uint32_t FLASH_SetcorSizeTest(uint32_t addr)
 }
 
  /**
- * @brief  Flash×Ô²â
- * @note   È·±£ÓĞ×ã¹»µÄÕ»¿Õ¼ä
- * @param  addr: ¿ªÊ¼µØÖ·
- * @retval CH_OK£ºÍê³É£»CH_ERR£ºÊ§°Ü
+ * @brief  Flashè‡ªæµ‹
+ * @note   ç¡®ä¿æœ‰è¶³å¤Ÿçš„æ ˆç©ºé—´
+ * @param  addr: å¼€å§‹åœ°å€
+ * @retval CH_OKï¼šå®Œæˆï¼›CH_ERRï¼šå¤±è´¥
  */
 uint32_t FLASH_Test(uint32_t addr, uint32_t len)
 {
