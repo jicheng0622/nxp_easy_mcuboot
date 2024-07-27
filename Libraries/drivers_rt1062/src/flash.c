@@ -288,9 +288,6 @@ status_t FLASH_Read(uint32_t addr, const uint8_t *buf, uint32_t len)
     flashXfer.rxSize = len;
 	
     __disable_irq();
-    ROM_FLEXSPI_NorFlash_ClearCache(0);
-    __DSB();//Wait for cache clear finished
-    __ISB();
     status = ROM_FLEXSPI_NorFlash_CommandXfer(0, &flashXfer);
     __enable_irq();
 
